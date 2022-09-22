@@ -39,7 +39,7 @@ const props = defineProps({
   z-index: -1;
   & > * {
     position: absolute;
-    transition: 1.5s;
+    transition: 1s;
   }
   .left-element,
   .right-element {
