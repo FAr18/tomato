@@ -2,9 +2,20 @@
   --color-main: #F2F0C9;
 }
 
+@font-face {
+  font-family: 'Century Gothic';
+  src: url('../src/assets/Century-Gothic.TTF');
+}
+
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: 'Century Gothic';
+  color: var(--color-main);
 }
 
+body {
+  background-color: #BC2B35;
+  overflow: hidden;
+}
