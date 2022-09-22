@@ -22,15 +22,15 @@
 const props = defineProps({
   size: {
     type: Number,
-    default: 380,
+    default: 0,
   },
   progress: {
     type: Number,
-    default: 34,
+    default: 0,
   },
   strokeWidth: {
     type: Number,
-    default: 5,
+    default: 1,
   },
 });
 
@@ -39,7 +39,7 @@ const radius = () => {
 };
 
 const circleRadius = () => {
-  return radius() - props.strokeWidth / 2;
+  return Math.max(radius() - props.strokeWidth / 2, 0);
 };
 
 const strokeLength = () => {
