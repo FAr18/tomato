@@ -5,6 +5,7 @@
   <TomatoQuicklyCreate :is-menu-opened="isMenuOpened" />
   <TomatoMenuButton :is-menu-opened="isMenuOpened" @toggle-menu="toggleMenu" />
   <TomatoSideMenuButton :is-menu-opened="isMenuOpened" />
+  <div class="side-menu-container" :class="{ close: !isMenuOpened }"></div>
 </template>
 
 <script setup>
@@ -18,7 +19,6 @@ import { ref, onMounted } from "vue";
 const isMenuOpened = ref(false);
 
 const toggleMenu = () => {
-  console.log("test");
   isMenuOpened.value = !isMenuOpened.value;
 };
 
@@ -33,4 +33,18 @@ onMounted(() => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.side-menu-container {
+  position: absolute;
+  width: 40vw;
+  height: 80vh;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  transition: 1s;
+  &.close {
+    right: -40vw;
+    opacity: 0;
+  }
+}
+</style>
