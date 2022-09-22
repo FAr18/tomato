@@ -59,7 +59,6 @@ svg {
 .progress-track {
   fill: #0000;
   stroke: var(--color-main);
-  transition: 0.5s;
 }
 .progress-rail {
   opacity: 0.3;
@@ -67,5 +66,6 @@ svg {
 
 .progress-track {
   opacity: 1;
+  transition: stroke-dasharray 0.5s;
 }
 </style>
