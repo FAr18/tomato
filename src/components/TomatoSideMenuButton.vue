@@ -1,0 +1,76 @@
+<template>
+  <div class="side-menu-container" :class="{ 'is-menu-opened': isMenuOpened }">
+    <div class="side-menu-button tasks active"></div>
+    <div class="side-menu-button records"></div>
+    <div class="side-menu-button settings"></div>
+  </div>
+</template>
+<script setup>
+const props = defineProps({
+  isMenuOpened: {
+    type: Boolean,
+    default: false,
+  },
+});
+const emits = defineEmits(["toggleMenu"]);
+</script>
+
+<style lang="scss" scoped>
+.side-menu-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  right: 5vh;
+  transform: translateY(-50%);
+  transition: 1s;
+  &.is-menu-opened {
+    right: 50vw;
+    transform: translate(50%, -50%);
+    .side-menu-button:not(.active) {
+      background-color: #bc2b35;
+      &::after {
+        opacity: 0.5;
+      }
+    }
+  }
+  .side-menu-button {
+    width: 4rem;
+    height: 4rem;
+    position: relative;
+    margin-block: 15px;
+    border-radius: 50%;
+    border: 1px solid var(--color-main);
+    background-color: #d9343f;
+    transition: 1s;
+    &::after {
+      content: "";
+      width: 50%;
+      height: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: 0.5s;
+      background: {
+        repeat: no-repeat;
+        size: contain;
+        position: center;
+      }
+    }
+    &.tasks::after {
+      background-image: url("../assets/icon_button_task.svg");
+    }
+    &.records::after {
+      background-image: url("../assets/icon_button_records.svg");
+    }
+    &.settings::after {
+      background-image: url("../assets/icon_button_settings.svg");
+    }
+    &.is-menu-opened {
+      // background-color: #bc2b35;
+      background-color: black;
+    }
+  }
+}
+</style>
