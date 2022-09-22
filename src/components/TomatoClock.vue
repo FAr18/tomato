@@ -16,20 +16,19 @@ const clockContainer = ref(null);
 //   progressValue.value = Math.min(progressValue.value + 1, 100);
 // };
 
-// // const test = () => {
-// //   setTimeout(() => {
-// //     increaseProgress();
-// //     test();
-// //   }, 1000);
-// // };
+// const test = () => {
+//   setTimeout(() => {
+//     increaseProgress();
+//     test();
+//   }, 1000);
+// };
 
-// // onMounted(() => {
-// //   progressSize.value = clockContainer.value.clientHeight;
-// //   window.addEventListener("resize", () => {
-// //     progressSize.value = clockContainer.value.clientHeight;
-// //   });
-// //   test();
-// // });
+onMounted(() => {
+  progressSize.value = clockContainer.value.clientHeight;
+  window.addEventListener("resize", () => {
+    progressSize.value = clockContainer.value.clientHeight;
+  });
+});
 </script>
 
 <style lang="scss" scoped>
