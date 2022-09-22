@@ -1,8 +1,20 @@
 <template>
   <div class="side-menu-buttons-container" :class="{ 'is-menu-opened': isMenuOpened }">
-    <div class="side-menu-button tasks active"></div>
-    <div class="side-menu-button records"></div>
-    <div class="side-menu-button settings"></div>
+    <div
+      class="side-menu-button tasks"
+      :class="{ active: currentTab == 'tasks' }"
+      @click="toggleMenu('tasks')"
+    ></div>
+    <div
+      class="side-menu-button records"
+      :class="{ active: currentTab == 'records' }"
+      @click="toggleMenu('records')"
+    ></div>
+    <div
+      class="side-menu-button settings"
+      :class="{ active: currentTab == 'settings' }"
+      @click="toggleMenu('settings')"
+    ></div>
   </div>
 </template>
 <script setup>
@@ -11,8 +23,18 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  currentTab: {
+    type: String,
+    default: "",
+  },
 });
-const emits = defineEmits(["toggleMenu"]);
+const emits = defineEmits(["toggleMenu", "toggleMenuOpen"]);
+const toggleMenu = (tab) => {
+  emits("toggleMenu", tab);
+  if (!props.isMenuOpened) {
+    emits("toggleMenuOpen");
+  }
+};
 </script>
 
 <style lang="scss" scoped>
