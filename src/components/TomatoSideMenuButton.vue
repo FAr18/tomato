@@ -1,5 +1,5 @@
 <template>
-  <div class="side-menu-container" :class="{ 'is-menu-opened': isMenuOpened }">
+  <div class="side-menu-buttons-container" :class="{ 'is-menu-opened': isMenuOpened }">
     <div class="side-menu-button tasks active"></div>
     <div class="side-menu-button records"></div>
     <div class="side-menu-button settings"></div>
@@ -16,7 +16,7 @@ const emits = defineEmits(["toggleMenu"]);
 </script>
 
 <style lang="scss" scoped>
-.side-menu-container {
+.side-menu-buttons-container {
   display: flex;
   flex-direction: column;
   position: absolute;
@@ -43,6 +43,7 @@ const emits = defineEmits(["toggleMenu"]);
     border: 1px solid var(--color-main);
     background-color: #d9343f;
     transition: 1s;
+    cursor: pointer;
     &::after {
       content: "";
       width: 50%;
@@ -66,10 +67,6 @@ const emits = defineEmits(["toggleMenu"]);
     }
     &.settings::after {
       background-image: url("../assets/icon_button_settings.svg");
-    }
-    &.is-menu-opened {
-      // background-color: #bc2b35;
-      background-color: black;
     }
   }
 }
