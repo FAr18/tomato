@@ -1,7 +1,7 @@
 <template>
   <Line
     :chart-options="chartOptions"
-    :chart-data="data"
+    :chart-data="chartData"
     :width="width"
     :height="height"
     :styles="styles"
@@ -32,15 +32,11 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
-  styles: {
-    type: Object,
-    default: () => {},
-  },
 });
 
 const lineChart = ref(null);
 
-const data = reactive({
+const chartData = reactive({
   labels: ["9/18", "9/19", "9/20", "9/21", "9/22", "9/23", "9/24"],
   datasets: [{ data: [12, 9, 7, 9, 10, 6, 7] }],
 });

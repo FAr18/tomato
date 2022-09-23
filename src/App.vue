@@ -1,16 +1,11 @@
 <template>
-  <TomatoBackground :is-menu-opened="isMenuOpened" />
+  <TomatoBackground />
   <TomatoLogo />
-  <TomatoClock :is-menu-opened="isMenuOpened" />
-  <TomatoQuicklyCreate :is-menu-opened="isMenuOpened" />
-  <TomatoMenuButton :is-menu-opened="isMenuOpened" @toggle-menu="toggleMenuOpen" />
-  <TomatoSideMenuButton
-    :is-menu-opened="isMenuOpened"
-    :current-tab="currentMenu"
-    @toggle-menu="toggleMenu"
-    @toggle-menu-open="toggleMenuOpen"
-  />
-  <div class="side-menu-container" :class="{ close: !isMenuOpened }">
+  <TomatoClock />
+  <TomatoQuicklyCreate />
+  <TomatoMenuButton />
+  <TomatoSideMenuButton />
+  <div class="side-menu-container" :class="{ close: !menuOpened }">
     <TomatoMenuTasks v-if="currentMenu == 'tasks'" />
     <TomatoMenuRecords v-if="currentMenu == 'records'" />
     <TomatoMenuSettings v-if="currentMenu == 'settings'" />
@@ -28,27 +23,11 @@ import TomatoMenuTasks from "./components/TomatoMenuTasks.vue";
 import TomatoMenuRecords from "./components/TomatoMenuRecords.vue";
 import TomatoMenuSettings from "./components/TomatoMenuSettings.vue";
 import { ref, onMounted } from "vue";
+import { storeToRefs } from "pinia";
+import { useViewStore } from "./stores/view";
 
-const isMenuOpened = ref(false);
-const currentMenu = ref("tasks");
-
-const toggleMenuOpen = () => {
-  isMenuOpened.value = !isMenuOpened.value;
-};
-
-const toggleMenu = (tabs) => {
-  currentMenu.value = tabs;
-};
-
-const test = () => {
-  setTimeout(() => {
-    isMenuOpened.value = !isMenuOpened.value;
-    test();
-  }, 3000);
-};
-onMounted(() => {
-  // test();
-});
+const viewStatus = useViewStore();
+const { menuOpened, currentMenu } = storeToRefs(viewStatus);
 </script>
 
 <style lang="scss" scoped>

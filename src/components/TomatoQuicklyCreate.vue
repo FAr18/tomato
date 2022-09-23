@@ -1,17 +1,16 @@
 <template>
-  <div class="quickly-create-container" :class="{ close: isMenuOpened }">
+  <div class="quickly-create-container" :class="{ close: menuOpened }">
     <input type="text" placeholder="Add a new mission..." />
     <button type="button"></button>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({
-  isMenuOpened: {
-    type: Boolean,
-    default: false,
-  },
-});
+import { storeToRefs } from "pinia";
+import { useViewStore } from "../stores/view";
+
+const viewStatus = useViewStore();
+const { menuOpened } = storeToRefs(viewStatus);
 </script>
 
 <style lang="scss" scoped>

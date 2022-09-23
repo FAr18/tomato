@@ -1,18 +1,14 @@
 <template>
   <div
     class="menu-button"
-    :class="{ 'is-menu-opened': isMenuOpened }"
-    @click="emits('toggleMenu')"
+    :class="{ 'is-menu-opened': viewStatus.menuOpened }"
+    @click="viewStatus.toggleMenuOpen(!viewStatus.menuOpened)"
   ></div>
 </template>
 <script setup>
-const props = defineProps({
-  isMenuOpened: {
-    type: Boolean,
-    default: false,
-  },
-});
-const emits = defineEmits(["toggleMenu"]);
+import { useViewStore } from "../stores/view";
+
+const viewStatus = useViewStore();
 </script>
 
 <style lang="scss" scoped>

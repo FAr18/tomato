@@ -1,33 +1,18 @@
 <template>
   <div class="background-container">
-    <div class="top-element" :class="{ hide: isMenuOpened }"></div>
+    <div class="top-element" :class="{ hide: menuOpened }"></div>
     <div class="left-element"></div>
-    <div class="bottom-element" :class="{ hide: isMenuOpened }"></div>
-    <div class="right-element" :class="{ 'is-opened': isMenuOpened }"></div>
+    <div class="bottom-element" :class="{ hide: menuOpened }"></div>
+    <div class="right-element" :class="{ 'is-opened': menuOpened }"></div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({
-  isMenuOpened: {
-    type: Boolean,
-    default: false,
-  },
-});
+import { storeToRefs } from "pinia";
+import { useViewStore } from "../stores/view";
 
-// below for test
-// import { ref, onMounted } from "vue";
-// const isMenuOpened = ref(false);
-
-// const toggleOpened = () => {
-//   setTimeout(() => {
-//     isMenuOpened.value = !isMenuOpened.value;
-//     toggleOpened();
-//   }, 2000);
-// };
-// onMounted(() => {
-//   toggleOpened();
-// });
+const viewStatus = useViewStore();
+const { menuOpened } = storeToRefs(viewStatus);
 </script>
 
 <style lang="scss" scoped>

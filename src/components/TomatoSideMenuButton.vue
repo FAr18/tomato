@@ -1,40 +1,29 @@
 <template>
-  <div class="side-menu-buttons-container" :class="{ 'is-menu-opened': isMenuOpened }">
+  <div class="side-menu-buttons-container" :class="{ 'is-menu-opened': menuOpened }">
     <div
       class="side-menu-button tasks"
-      :class="{ active: currentTab == 'tasks' }"
+      :class="{ active: currentMenu == 'tasks' }"
       @click="toggleMenu('tasks')"
     ></div>
     <div
       class="side-menu-button records"
-      :class="{ active: currentTab == 'records' }"
+      :class="{ active: currentMenu == 'records' }"
       @click="toggleMenu('records')"
     ></div>
     <div
       class="side-menu-button settings"
-      :class="{ active: currentTab == 'settings' }"
+      :class="{ active: currentMenu == 'settings' }"
       @click="toggleMenu('settings')"
     ></div>
   </div>
 </template>
 <script setup>
-const props = defineProps({
-  isMenuOpened: {
-    type: Boolean,
-    default: false,
-  },
-  currentTab: {
-    type: String,
-    default: "",
-  },
-});
-const emits = defineEmits(["toggleMenu", "toggleMenuOpen"]);
-const toggleMenu = (tab) => {
-  emits("toggleMenu", tab);
-  if (!props.isMenuOpened) {
-    emits("toggleMenuOpen");
-  }
-};
+import { storeToRefs } from "pinia";
+import { useViewStore } from "../stores/view";
+
+const viewStatus = useViewStore();
+const { menuOpened, currentMenu } = storeToRefs(viewStatus);
+const { toggleMenu } = viewStatus;
 </script>
 
 <style lang="scss" scoped>

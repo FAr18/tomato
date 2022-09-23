@@ -1,7 +1,7 @@
 <template>
   <div
     class="clock-container"
-    :class="{ 'is-menu-opened': isMenuOpened }"
+    :class="{ 'is-menu-opened': menuOpened }"
     ref="clockContainer"
   >
     <CircleProgressBar :size="progressSize" :progress="progressValue" :stroke-width="5" />
@@ -21,17 +21,16 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import CircleProgressBar from "./CircleProgressBar.vue";
+import { storeToRefs } from "pinia";
+import { useViewStore } from "../stores/view";
+
+const viewStatus = useViewStore();
+const { menuOpened } = storeToRefs(viewStatus);
+
 const progressValue = ref(0);
 const progressSize = ref(0);
 
 const clockContainer = ref(null);
-
-const props = defineProps({
-  isMenuOpened: {
-    type: Boolean,
-    default: false,
-  },
-});
 
 const increaseProgress = () => {
   if (progressValue.value >= 100) {
