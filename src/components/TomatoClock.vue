@@ -163,8 +163,9 @@ onMounted(() => {
     width: 5vh;
     height: 5vh;
     background: {
-      size: contain;
+      size: 4.95vh;
       repeat: no-repeat;
+      position: center;
     }
     margin-inline: 1vw;
     cursor: pointer;
