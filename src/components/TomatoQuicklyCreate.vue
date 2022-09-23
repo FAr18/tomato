@@ -1,16 +1,29 @@
 <template>
   <div class="quickly-create-container" :class="{ close: menuOpened }">
-    <input type="text" placeholder="Add a new mission..." />
-    <button type="button"></button>
+    <input type="text" placeholder="Add a new mission..." v-model="newTaskText" />
+    <button type="button" @click="createNewTask"></button>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useViewStore } from "../stores/view";
+import { useTasksStore } from "../stores/tasks";
 
 const viewStatus = useViewStore();
 const { menuOpened } = storeToRefs(viewStatus);
+
+const tasks = useTasksStore();
+const { insertTask } = tasks;
+
+const newTaskText = ref("");
+
+const createNewTask = () => {
+  if (newTaskText.value == "") return;
+  insertTask(newTaskText.value);
+  newTaskText.value = "";
+};
 </script>
 
 <style lang="scss" scoped>
