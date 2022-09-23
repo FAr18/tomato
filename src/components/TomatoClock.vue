@@ -6,11 +6,11 @@
   >
     <CircleProgressBar :size="progressSize" :progress="progressValue" :stroke-width="5" />
     <div class="info-container">
-      <h2 class="current-task-title">Clean up the desk</h2>
-      <h2 class="time">06 : 15</h2>
+      <h2 class="current-task-title">{{ currentTaskTitle }}</h2>
+      <h2 class="time">{{ timeLeftStr }}</h2>
       <div class="control-container">
         <div class="control-button ring"></div>
-        <div class="control-button play"></div>
+        <div class="control-button play" @click="playTimer"></div>
         <div class="control-button skip"></div>
       </div>
     </div>
@@ -19,32 +19,66 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import CircleProgressBar from "./CircleProgressBar.vue";
 import { storeToRefs } from "pinia";
 import { useViewStore } from "../stores/view";
+import { useTasksStore } from "../stores/tasks";
 
 const viewStatus = useViewStore();
 const { menuOpened } = storeToRefs(viewStatus);
 
-const progressValue = ref(0);
-const progressSize = ref(0);
+const tasks = useTasksStore();
+const { todayTasks } = tasks;
 
 const clockContainer = ref(null);
 
-const increaseProgress = () => {
-  if (progressValue.value >= 100) {
-    progressValue.value = 0;
-  } else {
-    progressValue.value++;
-  }
+const currentTaskIndex = ref(-1);
+const currentTaskTitle = computed(() => {
+  return clockType == "task"
+    ? (todayTasks[currentTaskIndex.value] && todayTasks[currentTaskIndex.value].title) ||
+        "Nothing to do"
+    : "Resting";
+});
+
+const progressValue = ref(0);
+const progressSize = ref(0);
+
+let clockType = "task";
+const maxTime = computed(() => {
+  return clockType == "task" ? 25 * 60 : 5 * 60;
+});
+const timeLeft = ref(1000);
+const timeLeftStr = computed(() => {
+  progressValue.value = (timeLeft.value / maxTime.value) * 100;
+  const min = Math.floor(timeLeft.value / 60);
+  const sec = timeLeft.value % 60;
+  return `${min > 9 ? min : "0" + min} : ${sec > 9 ? sec : "0" + sec}`;
+});
+
+let timer = null;
+const setupTimer = () => {
+  timer = setInterval(() => {
+    timeLeft.value--;
+    if (timeLeft.value == 0) {
+      if (clockType == "task") {
+        clockType = "rest";
+        timeLeft.value = maxTime.value;
+      } else if (clockType == "rest") {
+        clockType = "task";
+        timeLeft.value = maxTime.value;
+      }
+    }
+  }, 1000);
 };
 
-const test = () => {
-  setTimeout(() => {
-    increaseProgress();
-    test();
-  }, 500);
+const playTimer = () => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  } else {
+    setupTimer();
+  }
 };
 
 onMounted(() => {
@@ -52,7 +86,16 @@ onMounted(() => {
   window.addEventListener("resize", () => {
     progressSize.value = clockContainer.value.clientHeight;
   });
-  test();
+
+  // find first task
+  for (let i = 0; i < todayTasks.length; i++) {
+    if (!todayTasks[i].isDone) {
+      currentTaskIndex.value = i;
+      break;
+    }
+  }
+  timeLeft.value = maxTime.value;
+  // setupTimer();
 });
 </script>
 
