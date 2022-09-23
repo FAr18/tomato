@@ -4,7 +4,6 @@
     :chart-data="chartData"
     :width="width"
     :height="height"
-    :styles="styles"
     ref="lineChart"
   />
 </template>
