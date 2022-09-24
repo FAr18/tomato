@@ -12,7 +12,7 @@
         <div class="control-button ring"></div>
         <div class="control-button pause" v-show="timer" @click="pauseTimer"></div>
         <div class="control-button play" v-show="!timer" @click="playTimer"></div>
-        <div class="control-button skip"></div>
+        <div class="control-button skip" @click="skipTimer"></div>
       </div>
     </div>
     <div class="next-task">Next: {{ nextTaskTitle }}</div>
@@ -30,7 +30,7 @@ const viewStatus = useViewStore();
 const { menuOpened } = storeToRefs(viewStatus);
 
 const tasks = useTasksStore();
-const { todayTasks } = tasks;
+const { todayTasks, changeTaskState } = tasks;
 
 const clockContainer = ref(null);
 
@@ -69,11 +69,16 @@ const setupTimer = () => {
     timeLeft.value--;
     if (timeLeft.value == 0) {
       if (clockType == "task") {
+        changeTaskState(currentTaskIndex.value, true);
         clockType = "rest";
         timeLeft.value = maxTime.value;
       } else if (clockType == "rest") {
         clockType = "task";
         timeLeft.value = maxTime.value;
+        const nextId = findNextUnfinishedTask();
+        if (nextId) {
+          currentTaskIndex.value = nextId;
+        }
       }
     }
   }, 1000);
@@ -88,21 +93,30 @@ const pauseTimer = () => {
   timer.value = null;
 };
 
+const skipTimer = () => {
+  if (timer.value) pauseTimer();
+  currentTaskIndex.value++;
+};
+
+const findNextUnfinishedTask = () => {
+  let taskId = -1;
+  for (let i = currentTaskIndex.value + 1; i < todayTasks.length; i++) {
+    if (todayTasks[i].isDone === false) {
+      taskId = i;
+      break;
+    }
+  }
+  return taskId;
+};
+
 onMounted(() => {
   progressSize.value = clockContainer.value.clientHeight;
   window.addEventListener("resize", () => {
     progressSize.value = clockContainer.value.clientHeight;
   });
 
-  // find first task
-  for (let i = 0; i < todayTasks.length; i++) {
-    if (!todayTasks[i].isDone) {
-      currentTaskIndex.value = i;
-      break;
-    }
-  }
+  currentTaskIndex.value = findNextUnfinishedTask();
   timeLeft.value = maxTime.value;
-  // setupTimer();
 });
 </script>
 
