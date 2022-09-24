@@ -106,6 +106,8 @@ const skipTimer = () => {
   if (todayTasks[currentTaskIndex.value]) {
     changeTaskState(currentTaskIndex.value, true);
   }
+  clockType.value = "task";
+  timeLeft.value = maxTime.value;
   setNextTask();
 };
 
