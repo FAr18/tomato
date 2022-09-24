@@ -10,7 +10,8 @@
       <h2 class="time">{{ timeLeftStr }}</h2>
       <div class="control-container">
         <div class="control-button ring"></div>
-        <div class="control-button play" @click="playTimer"></div>
+        <div class="control-button pause" v-if="timer" @click="pauseTimer"></div>
+        <div class="control-button play" v-else @click="playTimer"></div>
         <div class="control-button skip"></div>
       </div>
     </div>
@@ -56,9 +57,9 @@ const timeLeftStr = computed(() => {
   return `${min > 9 ? min : "0" + min} : ${sec > 9 ? sec : "0" + sec}`;
 });
 
-let timer = null;
+const timer = ref(null);
 const setupTimer = () => {
-  timer = setInterval(() => {
+  timer.value = setInterval(() => {
     timeLeft.value--;
     if (timeLeft.value == 0) {
       if (clockType == "task") {
@@ -73,12 +74,12 @@ const setupTimer = () => {
 };
 
 const playTimer = () => {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  } else {
-    setupTimer();
-  }
+  setupTimer();
+};
+
+const pauseTimer = () => {
+  clearInterval(timer.value);
+  timer.value = null;
 };
 
 onMounted(() => {
@@ -163,7 +164,7 @@ onMounted(() => {
     width: 5vh;
     height: 5vh;
     background: {
-      size: 4.95vh;
+      size: 4.9vh;
       repeat: no-repeat;
       position: center;
     }
@@ -174,6 +175,9 @@ onMounted(() => {
     }
     &.play {
       background-image: url("../assets/icon_play.svg");
+    }
+    &.pause {
+      background-image: url("../assets/icon_pause.svg");
     }
     &.skip {
       background-image: url("../assets/icon_skip.svg");

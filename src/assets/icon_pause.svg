@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="70" height="70" viewBox="0 0 70 70">
+  <defs>
+    <style>.a,.d{fill:none;}.a{stroke:#f2f0c9;opacity:0.5;}.b{fill:#f2f0c9;}.c{stroke:none;}
+      .pause {
+        stroke: #f2f0c9;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <g transform="translate(-920 -691)">
+    <g class="a" transform="translate(920 691)">
+      <circle class="c" cx="35" cy="35" r="35"/>
+      <circle class="d" cx="35" cy="35" r="34.5"/>
+    </g>
+  </g>
+  <g transform="translate(35 35) rotate(90)">
+    <line class="pause" x2="20"  transform="translate(-10 -4)"/>
+    <line class="pause" x2="20"  transform="translate(-10 4)"/>
+  </g>
+</svg>
