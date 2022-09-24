@@ -36,7 +36,7 @@ const clockContainer = ref(null);
 
 const currentTaskIndex = ref(-1);
 const currentTaskTitle = computed(() => {
-  return clockType == "task"
+  return clockType.value == "task"
     ? (todayTasks[currentTaskIndex.value] && todayTasks[currentTaskIndex.value].title) ||
         "Nothing to do"
     : "Resting";
@@ -51,9 +51,9 @@ const nextTaskTitle = computed(() => {
 const progressValue = ref(0);
 const progressSize = ref(0);
 
-let clockType = "task";
+let clockType = ref("task");
 const maxTime = computed(() => {
-  return clockType == "task" ? 25 * 60 : 5 * 60;
+  return clockType.value == "task" ? 25 * 60 : 5 * 60;
 });
 const timeLeft = ref(1000);
 const timeLeftStr = computed(() => {
@@ -68,12 +68,12 @@ const setupTimer = () => {
   timer.value = setInterval(() => {
     timeLeft.value--;
     if (timeLeft.value == 0) {
-      if (clockType == "task") {
+      if (clockType.value == "task") {
         changeTaskState(currentTaskIndex.value, true);
-        clockType = "rest";
+        clockType.value = "rest";
         timeLeft.value = maxTime.value;
-      } else if (clockType == "rest") {
-        clockType = "task";
+      } else if (clockType.value == "rest") {
+        clockType.value = "task";
         timeLeft.value = maxTime.value;
         const nextId = findNextUnfinishedTask();
         if (nextId) {
