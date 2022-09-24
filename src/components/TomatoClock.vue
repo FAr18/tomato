@@ -43,12 +43,17 @@ const currentTaskTitle = computed(() => {
 });
 
 const nextTaskTitle = computed(() => {
-  return todayTasks[currentTaskIndex.value + 1]
-    ? todayTasks[currentTaskIndex.value + 1].title
+  const nextTaskId = findNextUnfinishedTask();
+  return nextTaskId && todayTasks[nextTaskId]
+    ? todayTasks[nextTaskId].title
     : "Nothing to do";
 });
 
-const progressValue = ref(0);
+const progressValue = computed(() => {
+  return clockType.value == "task"
+    ? (timeLeft.value / maxTime.value) * 100
+    : 100 - (timeLeft.value / maxTime.value) * 100;
+});
 const progressSize = ref(0);
 
 let clockType = ref("task");
@@ -57,7 +62,6 @@ const maxTime = computed(() => {
 });
 const timeLeft = ref(1000);
 const timeLeftStr = computed(() => {
-  progressValue.value = (timeLeft.value / maxTime.value) * 100;
   const min = Math.floor(timeLeft.value / 60);
   const sec = timeLeft.value % 60;
   return `${min > 9 ? min : "0" + min} : ${sec > 9 ? sec : "0" + sec}`;
