@@ -47,6 +47,8 @@ const createNewTask = () => {
     width: 15vw;
     border-block-end: 1px solid var(--color-main);
     padding-block: 10px;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
     &::placeholder {
       font-size: 1rem;
       letter-spacing: 0.1rem;
