@@ -10,12 +10,12 @@
       <h2 class="time">{{ timeLeftStr }}</h2>
       <div class="control-container">
         <div class="control-button ring"></div>
-        <div class="control-button pause" v-if="timer" @click="pauseTimer"></div>
-        <div class="control-button play" v-else @click="playTimer"></div>
+        <div class="control-button pause" v-show="timer" @click="pauseTimer"></div>
+        <div class="control-button play" v-show="!timer" @click="playTimer"></div>
         <div class="control-button skip"></div>
       </div>
     </div>
-    <div class="next-task">Next: Feed the cat</div>
+    <div class="next-task">Next: {{ nextTaskTitle }}</div>
   </div>
 </template>
 
@@ -40,6 +40,12 @@ const currentTaskTitle = computed(() => {
     ? (todayTasks[currentTaskIndex.value] && todayTasks[currentTaskIndex.value].title) ||
         "Nothing to do"
     : "Resting";
+});
+
+const nextTaskTitle = computed(() => {
+  return todayTasks[currentTaskIndex.value + 1]
+    ? todayTasks[currentTaskIndex.value + 1].title
+    : "Nothing to do";
 });
 
 const progressValue = ref(0);
