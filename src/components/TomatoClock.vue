@@ -73,19 +73,23 @@ const setupTimer = () => {
     timeLeft.value--;
     if (timeLeft.value == 0) {
       if (clockType.value == "task") {
-        changeTaskState(currentTaskIndex.value, true);
+        if (todayTasks[currentTaskIndex.value]) {
+          changeTaskState(currentTaskIndex.value, true);
+        }
         clockType.value = "rest";
         timeLeft.value = maxTime.value;
       } else if (clockType.value == "rest") {
         clockType.value = "task";
         timeLeft.value = maxTime.value;
-        const nextId = findNextUnfinishedTask();
-        if (nextId) {
-          currentTaskIndex.value = nextId;
-        }
+        setNextTask();
       }
     }
   }, 1000);
+};
+
+const setNextTask = () => {
+  const nextTaskId = findNextUnfinishedTask();
+  currentTaskIndex.value = nextTaskId;
 };
 
 const playTimer = () => {
@@ -99,7 +103,10 @@ const pauseTimer = () => {
 
 const skipTimer = () => {
   if (timer.value) pauseTimer();
-  currentTaskIndex.value++;
+  if (todayTasks[currentTaskIndex.value]) {
+    changeTaskState(currentTaskIndex.value, true);
+  }
+  setNextTask();
 };
 
 const findNextUnfinishedTask = () => {
