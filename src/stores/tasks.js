@@ -28,5 +28,5 @@ export const useTasksStore = defineStore('tasks', () => {
 
 const getTodayKey = () => {
   const today = new Date();
-  return `${today.getFullYear()}/${today.getMonth()}/${today.getDate()}`;
+  return `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
 };
