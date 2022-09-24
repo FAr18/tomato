@@ -6,22 +6,60 @@
     </div>
     <div class="today-tasks-container">
       <div class="date-container">
-        <button class="arrow left"></button>
-        <div class="today-label">SEP, 23 2022</div>
-        <button class="arrow right"></button>
+        <button class="arrow left" @click="prevDate"></button>
+        <div class="today-label">{{ dateString }}</div>
+        <button class="arrow right" @click="nextDate"></button>
       </div>
       <div class="tasks-list-container">
-        <label class="task-item-container" v-for="item in 5" :key="item">
-          <input type="checkbox" />
+        <label
+          class="task-item-container"
+          v-for="(todo, index) in dateTasks"
+          :key="index"
+        >
+          <input type="checkbox" :checked="todo.isDone" />
           <span class="checkmark"></span>
-          <div class="content">{{ item }}</div>
+          <div class="content">{{ todo.title }}</div>
         </label>
       </div>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, ref } from "vue";
+import { useTasksStore } from "../stores/tasks";
+import { tomatoStorage } from "../tools/localstorage";
+const tasks = useTasksStore();
+const { todayTasks } = tasks;
+
+const MILLISECOND_PER_DAY = 86400000;
+
+const tempToday = new Date().getTime();
+const specifiedDate = ref(tempToday);
+
+const loadSpecifiedDateTodos = () => {
+  const date = new Date(specifiedDate.value);
+  const dateKey = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+  return tomatoStorage.getData(dateKey);
+};
+
+const dateTasks = computed(() => {
+  return specifiedDate.value == tempToday ? todayTasks : loadSpecifiedDateTodos();
+});
+
+const dateString = computed(() => {
+  const date = new Date(specifiedDate.value);
+  return `${date.getMonth() + 1}, ${date.getDate()} ${date.getFullYear()}`;
+});
+
+const prevDate = () => {
+  specifiedDate.value -= MILLISECOND_PER_DAY;
+};
+
+const nextDate = () => {
+  specifiedDate.value += MILLISECOND_PER_DAY;
+};
+</script>
 
 <style lang="scss" scoped>
 .tasks-container {
