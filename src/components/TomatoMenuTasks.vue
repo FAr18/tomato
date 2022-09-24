@@ -1,8 +1,8 @@
 <template>
   <div class="tasks-container">
     <div class="create-task-container">
-      <input type="text" placeholder="Add new mission" />
-      <button type="button"></button>
+      <input type="text" placeholder="Add new mission" v-model="newTaskText" />
+      <button type="button" @click="insertNewTask"></button>
     </div>
     <div class="today-tasks-container">
       <div class="date-container">
@@ -30,20 +30,24 @@ import { computed, ref } from "vue";
 import { useTasksStore } from "../stores/tasks";
 import { tomatoStorage } from "../tools/localstorage";
 const tasks = useTasksStore();
-const { todayTasks } = tasks;
+const { todayTasks, insertTask } = tasks;
 
 const MILLISECOND_PER_DAY = 86400000;
 
 const tempToday = new Date().getTime();
 const specifiedDate = ref(tempToday);
 
-const loadSpecifiedDateTodos = () => {
+const getDateKey = () => {
   const date = new Date(specifiedDate.value);
-  const dateKey = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-  return tomatoStorage.getData(dateKey);
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+};
+
+const loadSpecifiedDateTodos = () => {
+  return tomatoStorage.getData(getDateKey());
 };
 
 const dateTasks = computed(() => {
+  forceUpdate.value;
   return specifiedDate.value == tempToday ? todayTasks : loadSpecifiedDateTodos();
 });
 
@@ -58,6 +62,25 @@ const prevDate = () => {
 
 const nextDate = () => {
   specifiedDate.value += MILLISECOND_PER_DAY;
+};
+
+const forceUpdate = ref(false);
+const newTaskText = ref("");
+const insertNewTask = () => {
+  if (newTaskText.value == "") return;
+  if (specifiedDate.value == tempToday) {
+    insertTask(newTaskText.value);
+  } else {
+    const key = getDateKey();
+    const tasks = loadSpecifiedDateTodos();
+    tasks.push({
+      title: newTaskText.value,
+      idDone: false,
+    });
+    tomatoStorage.saveData(key, tasks);
+  }
+  forceUpdate.value = !forceUpdate.value;
+  newTaskText.value = "";
 };
 </script>
 
