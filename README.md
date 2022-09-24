@@ -1,6 +1,6 @@
 # Tomato 番茄鐘
 
-vite, vue3, scss
+vite, vue3, scss, pinia, vue-chartjs
 
 ## UI 來源
 by Polina
