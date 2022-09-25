@@ -16,7 +16,7 @@
           v-for="(todo, index) in dateTasks"
           :key="index"
         >
-          <input type="checkbox" :checked="todo.isDone" />
+          <input type="checkbox" :checked="todo.isDone" @click="updateDone(index)" />
           <span class="checkmark"></span>
           <div class="content">{{ todo.title }}</div>
         </label>
@@ -30,7 +30,7 @@ import { computed, ref } from "vue";
 import { useTasksStore } from "../stores/tasks";
 import { tomatoStorage } from "../tools/localstorage";
 const tasks = useTasksStore();
-const { todayTasks, insertTask } = tasks;
+const { todayTasks, insertTask, changeTaskState } = tasks;
 
 const MILLISECOND_PER_DAY = 86400000;
 
@@ -72,15 +72,27 @@ const insertNewTask = () => {
     insertTask(newTaskText.value);
   } else {
     const key = getDateKey();
-    const tasks = loadSpecifiedDateTodos();
-    tasks.push({
+    const otherDateTasks = loadSpecifiedDateTodos();
+    otherDateTasks.push({
       title: newTaskText.value,
-      idDone: false,
+      isDone: false,
     });
-    tomatoStorage.saveData(key, tasks);
+    tomatoStorage.saveData(key, otherDateTasks);
   }
   forceUpdate.value = !forceUpdate.value;
   newTaskText.value = "";
+};
+
+const updateDone = (index) => {
+  if (specifiedDate.value == tempToday) {
+    changeTaskState(index, !todayTasks[index].isDone);
+  } else {
+    const key = getDateKey();
+    const otherDateTasks = loadSpecifiedDateTodos();
+    console.table(otherDateTasks);
+    otherDateTasks[index].isDone = !otherDateTasks[index].isDone;
+    tomatoStorage.saveData(key, otherDateTasks);
+  }
 };
 </script>
 
