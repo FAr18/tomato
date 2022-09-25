@@ -89,7 +89,6 @@ const updateDone = (index) => {
   } else {
     const key = getDateKey();
     const otherDateTasks = loadSpecifiedDateTodos();
-    console.table(otherDateTasks);
     otherDateTasks[index].isDone = !otherDateTasks[index].isDone;
     tomatoStorage.saveData(key, otherDateTasks);
   }
