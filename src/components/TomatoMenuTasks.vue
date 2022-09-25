@@ -1,14 +1,14 @@
 <template>
   <div class="tasks-container">
     <div class="create-task-container">
-      <input type="text" placeholder="Add new mission" v-model="newTaskText" />
+      <input type="text" placeholder="Add a new mission" v-model="newTaskText" />
       <button type="button" @click="insertNewTask"></button>
     </div>
     <div class="today-tasks-container">
       <div class="date-container">
-        <button class="arrow left" @click="prevDate"></button>
-        <div class="today-label">{{ dateString }}</div>
-        <button class="arrow right" @click="nextDate"></button>
+        <button class="arrow left" @click="gotoPrevDate"></button>
+        <div class="today-label">{{ formattedDate }}</div>
+        <button class="arrow right" @click="gotoNextDate"></button>
       </div>
       <div class="tasks-list-container">
         <label
@@ -34,8 +34,8 @@ const { todayTasks, insertTask, changeTaskState } = tasks;
 
 const MILLISECOND_PER_DAY = 86400000;
 
-const tempToday = new Date().getTime();
-const specifiedDate = ref(tempToday);
+const initialDatetime = new Date().getTime();
+const specifiedDate = ref(initialDatetime);
 
 const getDateKey = () => {
   const date = new Date(specifiedDate.value);
@@ -48,19 +48,19 @@ const loadSpecifiedDateTodos = () => {
 
 const dateTasks = computed(() => {
   forceUpdate.value;
-  return specifiedDate.value == tempToday ? todayTasks : loadSpecifiedDateTodos();
+  return specifiedDate.value == initialDatetime ? todayTasks : loadSpecifiedDateTodos();
 });
 
-const dateString = computed(() => {
+const formattedDate = computed(() => {
   const date = new Date(specifiedDate.value);
   return `${date.getMonth() + 1}, ${date.getDate()} ${date.getFullYear()}`;
 });
 
-const prevDate = () => {
+const gotoPrevDate = () => {
   specifiedDate.value -= MILLISECOND_PER_DAY;
 };
 
-const nextDate = () => {
+const gotoNextDate = () => {
   specifiedDate.value += MILLISECOND_PER_DAY;
 };
 
@@ -68,7 +68,7 @@ const forceUpdate = ref(false);
 const newTaskText = ref("");
 const insertNewTask = () => {
   if (newTaskText.value == "") return;
-  if (specifiedDate.value == tempToday) {
+  if (specifiedDate.value == initialDatetime) {
     insertTask(newTaskText.value);
   } else {
     const key = getDateKey();
@@ -84,7 +84,7 @@ const insertNewTask = () => {
 };
 
 const updateDone = (index) => {
-  if (specifiedDate.value == tempToday) {
+  if (specifiedDate.value == initialDatetime) {
     changeTaskState(index, !todayTasks[index].isDone);
   } else {
     const key = getDateKey();
