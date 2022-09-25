@@ -27,7 +27,7 @@
 
 <script setup>
 import { computed, ref } from "vue";
-import { useTasksStore } from "../stores/tasks";
+import { useTasksStore, getDateKey } from "../stores/tasks";
 import { tomatoStorage } from "../tools/localstorage";
 const tasks = useTasksStore();
 const { todayTasks, insertTask, changeTaskState } = tasks;
@@ -37,13 +37,8 @@ const MILLISECOND_PER_DAY = 86400000;
 const initialDatetime = new Date().getTime();
 const specifiedDate = ref(initialDatetime);
 
-const getDateKey = () => {
-  const date = new Date(specifiedDate.value);
-  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-};
-
 const loadSpecifiedDateTodos = () => {
-  return tomatoStorage.getData(getDateKey());
+  return tomatoStorage.getData(getDateKey(new Date(specifiedDate.value)));
 };
 
 const dateTasks = computed(() => {
@@ -51,8 +46,10 @@ const dateTasks = computed(() => {
   return specifiedDate.value == initialDatetime ? todayTasks : loadSpecifiedDateTodos();
 });
 
+let cacheDateKey = "";
 const formattedDate = computed(() => {
   const date = new Date(specifiedDate.value);
+  cacheDateKey = getDateKey(date);
   return `${date.getMonth() + 1}, ${date.getDate()} ${date.getFullYear()}`;
 });
 
@@ -71,7 +68,7 @@ const insertNewTask = () => {
   if (specifiedDate.value == initialDatetime) {
     insertTask(newTaskText.value);
   } else {
-    const key = getDateKey();
+    const key = getDateKey(new Date(specifiedDate.value));
     const otherDateTasks = loadSpecifiedDateTodos();
     otherDateTasks.push({
       title: newTaskText.value,
@@ -87,7 +84,7 @@ const updateDone = (index) => {
   if (specifiedDate.value == initialDatetime) {
     changeTaskState(index, !todayTasks[index].isDone);
   } else {
-    const key = getDateKey();
+    const key = getDateKey(new Date(specifiedDate.value));
     const otherDateTasks = loadSpecifiedDateTodos();
     otherDateTasks[index].isDone = !otherDateTasks[index].isDone;
     tomatoStorage.saveData(key, otherDateTasks);
