@@ -31,14 +31,13 @@ const props = defineProps({
     type: Number,
     default: 100,
   },
+  chartData: {
+    type: Object,
+    default: {},
+  },
 });
 
 const lineChart = ref(null);
-
-const chartData = reactive({
-  labels: ["9/18", "9/19", "9/20", "9/21", "9/22", "9/23", "9/24"],
-  datasets: [{ data: [12, 9, 7, 9, 10, 6, 7] }],
-});
 
 const chartColor = "#F2F0C9";
 const chartOptions = reactive({
@@ -60,6 +59,7 @@ const chartOptions = reactive({
   scales: {
     yAxis: {
       min: 0,
+      suggestedMax: 20,
       ticks: {
         color: chartColor,
         font: {
