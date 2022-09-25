@@ -17,7 +17,7 @@ header {
     width: 170px;
     height: 40px;
     background: {
-      image: url("../src/assets/logo.svg");
+      image: url("../assets/logo.svg");
       repeat: no-repeat;
     }
   }
