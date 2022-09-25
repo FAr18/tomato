@@ -10,12 +10,12 @@ export const useTasksStore = defineStore('tasks', () => {
       title: newTask,
       isDone: false
     });
-    tomatoStorage.saveData(currentDate, todayTasks);
+    tomatoStorage.saveData(currentDateKey, todayTasks);
   };
 
   const changeTaskState = (taskId, isDone) => {
     todayTasks[taskId].isDone = isDone;
-    tomatoStorage.saveData(currentDate, todayTasks);
+    tomatoStorage.saveData(currentDateKey, todayTasks);
   };
 
   return {
