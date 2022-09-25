@@ -1,10 +1,12 @@
 # Tomato 番茄鐘
 
+[Demo](https://far18.github.io/tomato/)
+
 vite, vue3, scss, pinia, vue-chartjs
 
 ## to-do list
 - [X] 主要功能
-- [ ] 任務列表
+- [X] 任務列表
 - [ ] 紀錄頁面
 - [ ] 選單頁面動畫
 - [ ] 音效
