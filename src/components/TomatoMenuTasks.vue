@@ -46,10 +46,8 @@ const dateTasks = computed(() => {
   return specifiedDate.value == initialDatetime ? todayTasks : loadSpecifiedDateTodos();
 });
 
-let cacheDateKey = "";
 const formattedDate = computed(() => {
   const date = new Date(specifiedDate.value);
-  cacheDateKey = getDateKey(date);
   return `${date.getMonth() + 1}, ${date.getDate()} ${date.getFullYear()}`;
 });
 
