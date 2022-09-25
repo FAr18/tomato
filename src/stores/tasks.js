@@ -2,8 +2,8 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { tomatoStorage } from '../tools/localstorage';
 export const useTasksStore = defineStore('tasks', () => {
-  const currentDate = getTodayKey();
-  const todayTasks = reactive(tomatoStorage.getData(currentDate));
+  const currentDateKey = getDateKey(new Date());
+  const todayTasks = reactive(tomatoStorage.getData(currentDateKey));
 
   const insertTask = (newTask) => {
     todayTasks.push({
@@ -26,7 +26,6 @@ export const useTasksStore = defineStore('tasks', () => {
   }
 });
 
-const getTodayKey = () => {
-  const today = new Date();
-  return `${today.getFullYear()}/${today.getMonth() + 1}/${today.getDate()}`;
+export const getDateKey = (date) => {
+  return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 };
